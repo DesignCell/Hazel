@@ -2,6 +2,7 @@
 #include "OpenGLRendererAPI.h"
 
 #include <glad/glad.h>
+
 namespace Hazel {
 
 
