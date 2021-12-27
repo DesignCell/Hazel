@@ -68,7 +68,6 @@ namespace Hazel {
 
 			m_Window->OnUpdate();
 
-
 		}
 	}
 
@@ -77,5 +76,4 @@ namespace Hazel {
 		m_Running = false;
 		return true;
 	}
-
 }

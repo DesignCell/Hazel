@@ -7,7 +7,7 @@ class ExampleLayer : public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_CameraRotation(0.0f)
 	{
 		m_VertexArray.reset(Hazel::VertexArray::Create());
 
@@ -127,11 +127,26 @@ public:
 
 	void OnUpdate() override
 	{
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
+			m_CameraPosition.x -= m_CameraMoveSpeed;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
+			m_CameraPosition.x += m_CameraMoveSpeed;
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
+			m_CameraPosition.y -= m_CameraMoveSpeed;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
+			m_CameraPosition.y += m_CameraMoveSpeed;
+		
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
+			m_CameraRotation += m_CameraRotationSpeed;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
+			m_CameraRotation -= m_CameraRotationSpeed;
+
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.15f, 1 });
 		Hazel::RenderCommand::Clear();
 
-		m_Camera.SetPosition({ 1.0f, 0.0f, 0.0f });
-		m_Camera.SetRotation(0.0f);
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
 		Hazel::Renderer::BeginScene(m_Camera);
 
@@ -150,8 +165,8 @@ public:
 
 	void OnEvent(Hazel::Event& event) override
 	{
-
 	}
+
 
 private:
 	std::shared_ptr<Hazel::Shader> m_Shader;
@@ -161,7 +176,10 @@ private:
 	std::shared_ptr<Hazel::VertexArray> m_SquareVA;
 
 	Hazel::OrthographicCamera m_Camera;
-
+	glm::vec3 m_CameraPosition;
+	float m_CameraMoveSpeed = 0.05f;
+	float m_CameraRotationSpeed = 0.5f;
+	float m_CameraRotation = 0.0f;
 };
 
 class Sandbox : public Hazel::Application
